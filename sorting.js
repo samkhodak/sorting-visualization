@@ -84,6 +84,8 @@ async function partition(to_sort, min, max) {
   left = min + 1;
   right = max;
 
+  await sleep(100);
+
   bars[pivot].style.backgroundColor = pivot_color;
   bars[left].style.backgroundColor = range_color;
   bars[right].style.backgroundColor = range_color;
