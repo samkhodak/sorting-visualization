@@ -39,7 +39,7 @@ main {
 }
 
 .array-bar {
-  background-color: lightblue;
-  border: 1px solid palevioletred;
+  background-color: #A0BAA3; 
+  border: 1px solid white;
   flex-grow: 1;
 }

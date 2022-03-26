@@ -1,30 +1,50 @@
+//Global section
 const container = document.getElementById("sorting-frame");
 const start_button = document.getElementById("start-btn");
 const reset_button = document.getElementById("reset-btn");
+const main_bar_color = "#A0BAA3";
+const pivot_color = "#395646";
+const range_color = "#73B0FF";
 
+
+//Main 
 let to_sort = [];
 array_size = 60;
 
 randomize_array();
 draw_frame();
 
-// let bars = document.getElementsByClassName("array-bar");
-let bars2 = document.querySelectorAll(".array-bar");
-console.log(bars2);
+let bars = document.querySelectorAll(".array-bar");
 
+
+//Event Listeners
 start_button.addEventListener("click", () => {
-  start_button.disabled = true;
-  reset_button.disabled = true;
-  quicksort(to_sort, 0, array_size - 1);
-  console.log(to_sort);
-  start_button.disabled = false;
-  reset_button.disabled = false;
+  start();
 });
 
 reset_button.addEventListener("click", () => {
-  clear_frame(bars);
-  start_button.disabled = false;
+  reset();
 });
+
+
+
+//Functions
+async function start() {
+  start_button.disabled = true;
+  reset_button.disabled = true;
+  await quicksort(to_sort, 0, array_size - 1);
+  reset_button.disabled = false;
+
+}
+
+function reset() {
+  clear_frame();
+  randomize_array();
+  draw_frame();
+  bars = document.querySelectorAll(".array-bar");
+  start_button.disabled = false;
+}
+
 
 function swap_two(index1, index2) {
   //Swap in the integer array
@@ -32,11 +52,9 @@ function swap_two(index1, index2) {
   to_sort[index1] = to_sort[index2];
   to_sort[index2] = a;
 
-  console.log(`index ${index1}: ${to_sort[index1]}, index ${index2}: ${to_sort[index2]}`);
-
   //Swap heights in the bars array
-  bars2[index1].style.height = `${to_sort[index1]}px`;
-  bars2[index2].style.height = `${to_sort[index2]}px`;
+  bars[index1].style.height = `${to_sort[index1]}px`;
+  bars[index2].style.height = `${to_sort[index2]}px`;
 }
 
 function randomize_array() {
@@ -55,49 +73,46 @@ function sleep(ms) {
 async function quicksort(to_sort, min, max) {
   if (min >= max) return;
 
-  let pivot = await swap_one_range(to_sort, min, max);
+  let pivot = await partition(to_sort, min, max);
 
   await quicksort(to_sort, min, pivot - 1);
   await quicksort(to_sort, pivot + 1, max);
 }
 
-async function swap_one_range(to_sort, min, max) {
+async function partition(to_sort, min, max) {
   pivot = min;
   left = min + 1;
   right = max;
 
-  await sleep(250);
+  bars[pivot].style.backgroundColor = pivot_color;
+  bars[left].style.backgroundColor = range_color;
+  bars[right].style.backgroundColor = range_color;
 
   do {
     while (to_sort[right] >= to_sort[pivot] && right != left) --right;
     while (to_sort[left] <= to_sort[pivot] && left != right) ++left;
 
+    await sleep(100);
 
     if (left != right) {
-      // let a = to_sort[left];
-      // to_sort[left] = to_sort[right];
-      // to_sort[right] = a;
-      // let bars = document.getElementsByClassName("array-bar");
-      // clear_frame(bars);
-
-      // draw_frame();
       swap_two(left, right);
     }
   } while (left != right);
 
+  await sleep(100);
+
   if (to_sort[pivot] > to_sort[right]) {
-    // let a = to_sort[pivot];
-    // to_sort[pivot] = to_sort[right];
-    // to_sort[right] = a;
-
-    // let bars = document.getElementsByClassName("array-bar");
-    // clear_frame(bars);
-
-    // draw_frame();
     swap_two(pivot, right);
+    bars[min + 1].style.backgroundColor = main_bar_color;
+    bars[max].style.backgroundColor = main_bar_color;
 
     return right;
-  } else return pivot;
+  } else {
+    bars[min + 1].style.backgroundColor = main_bar_color;
+    bars[max].style.backgroundColor = main_bar_color;
+
+    return pivot;
+  }
 }
 
 function draw_frame() {
@@ -113,7 +128,7 @@ function draw_frame() {
 }
 
 //Clear the sorting "frame" (container) of the bars.
-function clear_frame(bars) {
+function clear_frame() {
   Array.from(bars).forEach((element) => element.remove());
 }
 
