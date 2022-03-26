@@ -6,12 +6,15 @@ let to_sort = [];
 array_size = 60;
 
 randomize_array();
+draw_frame();
 
+// let bars = document.getElementsByClassName("array-bar");
+let bars2 = document.querySelectorAll(".array-bar");
+console.log(bars2);
 
 start_button.addEventListener("click", () => {
   start_button.disabled = true;
   reset_button.disabled = true;
-  draw_frame(to_sort);
   quicksort(to_sort, 0, array_size - 1);
   console.log(to_sort);
   start_button.disabled = false;
@@ -19,23 +22,34 @@ start_button.addEventListener("click", () => {
 });
 
 reset_button.addEventListener("click", () => {
-  let bars = document.getElementsByClassName("array-bar");
   clear_frame(bars);
   start_button.disabled = false;
 });
 
-function randomize_array() {
-  //Clear array
-  to_sort = []; 
+function swap_two(index1, index2) {
+  //Swap in the integer array
+  let a = to_sort[index1];
+  to_sort[index1] = to_sort[index2];
+  to_sort[index2] = a;
 
-  for (let i = 0; i < array_size; ++i) {
-   to_sort.push(random_height(15, 450));
+  console.log(`index ${index1}: ${to_sort[index1]}, index ${index2}: ${to_sort[index2]}`);
+
+  //Swap heights in the bars array
+  bars2[index1].style.height = `${to_sort[index1]}px`;
+  bars2[index2].style.height = `${to_sort[index2]}px`;
 }
 
+function randomize_array() {
+  //Clear array
+  to_sort = [];
+
+  for (let i = 0; i < array_size; ++i) {
+    to_sort.push(random_height(15, 450));
+  }
 }
 
 function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 async function quicksort(to_sort, min, max) {
@@ -58,36 +72,35 @@ async function swap_one_range(to_sort, min, max) {
     while (to_sort[right] >= to_sort[pivot] && right != left) --right;
     while (to_sort[left] <= to_sort[pivot] && left != right) ++left;
 
-    // console.log(`left: ${left}, right: ${right}`);
 
     if (left != right) {
-      let a = to_sort[left];
-      to_sort[left] = to_sort[right];
-      to_sort[right] = a;
-      let bars = document.getElementsByClassName("array-bar");
-      clear_frame(bars);
+      // let a = to_sort[left];
+      // to_sort[left] = to_sort[right];
+      // to_sort[right] = a;
+      // let bars = document.getElementsByClassName("array-bar");
+      // clear_frame(bars);
 
-      draw_frame(to_sort);
+      // draw_frame();
+      swap_two(left, right);
     }
   } while (left != right);
 
   if (to_sort[pivot] > to_sort[right]) {
-    let a = to_sort[pivot];
-    to_sort[pivot] = to_sort[right];
-    to_sort[right] = a;
+    // let a = to_sort[pivot];
+    // to_sort[pivot] = to_sort[right];
+    // to_sort[right] = a;
 
-    let bars = document.getElementsByClassName("array-bar");
-    clear_frame(bars);
+    // let bars = document.getElementsByClassName("array-bar");
+    // clear_frame(bars);
 
-    draw_frame(to_sort);
+    // draw_frame();
+    swap_two(pivot, right);
 
     return right;
   } else return pivot;
 }
 
-// function swap(to_sort, element_one, element_two) {}
-
-function draw_frame(to_sort) {
+function draw_frame() {
   let i = 0;
   to_sort.forEach((element) => {
     let one_bar = document.createElement("div");
