@@ -14,12 +14,23 @@
   </head>
   <body>
     <main>
-      <h1 class="title">Sorting Visualization</h1>
+      <h1 class="title">Quicksort Visualization</h1>
 
       <section id="sorting-frame" class="sorting-frame"></section>
 
-      <button id="start-btn" class="btn">start sort</button>
-      <button id="reset-btn" class="btn">reset array</button>
+      <div class="info-panel">
+        <button id="start-btn" class="start-btn btn">start sort</button>
+        <button id="reset-btn" class="reset-btn btn">reset array</button>
+
+        <p class="text">
+          The <strong class="blue-text">blue</strong> bars represent the
+          beginning and end of the current partition being swapped.
+        </p>
+        <p>
+          The <strong class="dark-green-text">dark-green</strong> bars represent
+          the various pivot points.
+        </p>
+      </div>
     </main>
   </body>
 </html>
